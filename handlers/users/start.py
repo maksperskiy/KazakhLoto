@@ -41,7 +41,10 @@ async def start(message: types.Message):
 async def AddTwitch(message: types.Message, state: FSMContext):
     print(f"Имя {message.text}")
     addTwitchName(message.chat.id, message.text)
-    await message.answer("Вы установили ник")
+    if isGameStarted():
+        await message.answer("Вы установили ник", reply_markup=nav.AdminMenu)
+    else:
+        await message.answer("Вы установили ник")
     await state.finish()
 
 
@@ -73,10 +76,4 @@ async def AddTwitch(message: types.Message, state: FSMContext):
 #     InsertMass(id_card, num_card)
 #     await message.answer("Карточка сохранена")
 #     await state.finish()
-
-
-
-
-
-
 

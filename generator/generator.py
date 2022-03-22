@@ -20,7 +20,7 @@ COLUMNS = [[1, 9],
            [80, 90]]
 
 
-def generate_images(file_name="Combik.txt", background_name="fon_loto.png"):
+def generate_images(file_name="lotteries.txt", background_name="fon_loto.png"):
 
     # load files
     file_path = os.path.join(DIR_PATH, file_name)
@@ -81,8 +81,11 @@ def generate_images(file_name="Combik.txt", background_name="fon_loto.png"):
 
         draw.text((20, 15), str(line_number+1), (20, 20, 20), font=font)
 
-        save_path = os.path.join(
-            DIR_PATH, 'cards', f'loto-{line_number+1}.jpg')
+        path_to_savefolder = os.path.join(DIR_PATH + os.sep + os.pardir, 'cards')
+        if not os.path.exists(path_to_savefolder):
+            os.makedirs(path_to_savefolder)
+
+        save_path = os.path.join(path_to_savefolder, f'loto-{line_number+1}.jpg')
         fon_loto.save(save_path)
 
 
@@ -108,6 +111,11 @@ def generate_lotteries(count=10):
             if loto not in lotteries:
                 lotteries.append(sorted(loto))
                 f.write(str(sorted(loto)) + '\n')
+
+
+def generate_images_if_not_exists(file_name="lotteries.txt", background_name="fon_loto.png"):
+    if not os.path.exists(os.path.join(DIR_PATH + os.sep + os.pardir, 'cards', 'loto-1.jgp')):
+        generate_images(file_name, background_name)
 
 
 if __name__ == "__main__":

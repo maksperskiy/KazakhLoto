@@ -20,16 +20,22 @@ async def admin(message: types.Message):
         await message.answer("У вас нет прав")
 
 
-@dp.message_handler(commands=['online'])
+@dp.message_handler(Text(equals="Онлайн"), state=None)
 async def admin(message: types.Message):
     if isAdmin(message.chat.id):
-        await message.answer(f"Онлайн: {usersCount()}")
+        if isGameStarted():
+            await message.answer(f"Онлайн: {usersCount()}")
+        else:
+            await message.answer(f"Игра не начата")
     else:
         await message.answer("У вас нет прав")
 
 @dp.message_handler(Text(equals="Начать игру"), state=None)
 async def answer_b1(message: types.Message, state: FSMContext):
     if isAdmin(message.chat.id):
+        if isGameStarted():
+            await message.answer("Игра уже начата")
+            return
         
         keyboard = types.InlineKeyboardMarkup()
         button = types.InlineKeyboardButton(
@@ -39,8 +45,8 @@ async def answer_b1(message: types.Message, state: FSMContext):
         keyboard.add(button)
 
         startSession()
-        #for chat_id in selectUserMailing():
-        #    await bot.send_message(chat_id[0], "Ку игра началась!\nНе желаешь присоединиться?", reply_markup=nav.ynMenu)
+        for chat_id in getUserMailing():
+           await bot.send_message(chat_id, "Ку игра началась!\nНе желаешь присоединиться?", reply_markup=nav.ynMenu)
         await message.answer("<b>ADMIN</b> По мере необходимости вводи выпавшее число", reply_markup=keyboard)
     else:
         await message.answer("У вас нет прав")
@@ -59,7 +65,7 @@ async def answer_b1(message: types.Message, state: FSMContext):
         if isGameStarted():
             try:
                 for chat_id in getUserMailingInSession():
-                    await bot.send_message(chat_id[0], "<b>Игра завершена!</b>\n"
+                    await bot.send_message(chat_id, "<b>Игра завершена!</b>\n"
                                                        "по тех вопросам к @mironchikk")
                 stopSession()
                 await bot.send_message(message.chat.id, "Вы завершили игру")

@@ -1,3 +1,4 @@
+from generator.generator import *
 from loader import bot, storage
 from services.service import *
 
@@ -11,6 +12,8 @@ if __name__ == '__main__':
     from aiogram import executor
     from handlers import dp
 
+    generate_images_if_not_exists()
+    
     addGame()
 
     executor.start_polling(dp, on_shutdown=on_shutdown, skip_updates=True)

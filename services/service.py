@@ -49,11 +49,11 @@ def addAdmin(chat_id):
 
 
 def getUserMailing():
-    return session.query(User.chat_id).all()
+    return session.scalars(session.query(User.chat_id)).all()
 
 
 def getUserMailingInSession():
-    return session.query(User.chat_id).filter(User.session).all()
+    return session.scalars(session.query(User.chat_id).filter(User.session)).all()
 
 
 def getAdmins():
@@ -78,7 +78,7 @@ def stopSession():
 
 
 def isGameStarted():
-    return session.query(Game.session).first()
+    return session.scalars(session.query(Game.session)).first()
 
 
 def connectUser(chat_id):
