@@ -1,6 +1,4 @@
-from datetime import datetime
-from re import A
-
+from config import CONNECTION_STRING
 from data.entities import *
 from loader import dp, bot
 
@@ -10,8 +8,7 @@ from sqlalchemy.orm import Session, sessionmaker, joinedload, load_only
 import random
 
 
-engine = create_engine(
-    "postgresql://postgres:password@localhost:15432/kazakhloto")
+engine = create_engine(CONNECTION_STRING)
 
 session = Session(bind=engine)
 
@@ -40,7 +37,15 @@ def addTwitchName(chat_id, twitch_name):
 
 
 def isAdmin(chat_id):
-    return session.query(Admin).options(joinedload(User)).filter(User.chat_id == chat_id).count() > 0
+    return session.query(User).select_from(Admin).join(Admin.user).filter(User.chat_id == chat_id).count() > 0
+
+
+def addAdmin(chat_id):
+    user_id = session.scalars(session.query(User.id).filter(User.chat_id == chat_id)).first()
+    session.add(Admin(
+        user_id = user_id
+    ))
+    session.commit()
 
 
 def getUserMailing():
@@ -72,7 +77,7 @@ def stopSession():
     session.commit()
 
 
-def getGameStatus():
+def isGameStarted():
     return session.query(Game.session).first()
 
 

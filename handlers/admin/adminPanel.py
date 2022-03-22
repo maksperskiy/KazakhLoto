@@ -14,7 +14,7 @@ onl = CallbackData("post", "users", "action")
 @dp.message_handler(commands=['admin'])
 async def admin(message: types.Message):
     user = message.from_user
-    if (isAdmin(user.id)):
+    if isAdmin(user.id):
         await message.answer("Вы админ", reply_markup=nav.AdminMenu)
     else:
         await message.answer("У вас нет прав")
@@ -22,14 +22,14 @@ async def admin(message: types.Message):
 
 @dp.message_handler(commands=['online'])
 async def admin(message: types.Message):
-    if (isAdmin(message.chat.id)):
+    if isAdmin(message.chat.id):
         await message.answer(f"Онлайн: {usersCount()}")
     else:
         await message.answer("У вас нет прав")
 
 @dp.message_handler(Text(equals="Начать игру"), state=None)
 async def answer_b1(message: types.Message, state: FSMContext):
-    if (isAdmin(message.chat.id)):
+    if isAdmin(message.chat.id):
         
         keyboard = types.InlineKeyboardMarkup()
         button = types.InlineKeyboardButton(
@@ -55,8 +55,8 @@ async def onlineCheck(call: types.CallbackQuery, callback_data: dict):
 
 @dp.message_handler(Text(equals="Завершить игру"), state=None)
 async def answer_b1(message: types.Message, state: FSMContext):
-    if (isAdmin(message.chat.id)):
-        if (getGameStatus()):
+    if isAdmin(message.chat.id):
+        if isGameStarted():
             try:
                 for chat_id in getUserMailingInSession():
                     await bot.send_message(chat_id[0], "<b>Игра завершена!</b>\n"
@@ -84,9 +84,9 @@ async def answer_b1(message: types.Message, state: FSMContext):
 
 
 
-@dp.message_handler(Text(equals="dsadsadasasdppp"), state=None)
+@dp.message_handler(Text(equals="Read lotteries file"), state=None)
 async def ppp(message: types.Message):
-    if (isAdmin(message.chat.id)):
+    if isAdmin(message.chat.id):
         file = open("generator/lotteries.txt", "r")
         for line_number, loto in enumerate(file.readlines()):
             addCard(line_number+1, json.loads(loto))
@@ -98,7 +98,7 @@ async def ppp(message: types.Message):
 @dp.message_handler()
 async def answer_b1(message: types.Message, state: FSMContext):
     if (isAdmin(message.chat.id)):
-        if(getGameStatus()):
+        if isGameStarted():
             try:
                 mess = int(message.text)
                 addNum(mess)

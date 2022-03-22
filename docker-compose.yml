@@ -6,14 +6,14 @@ volumes:
 
 services:
   kazakhloto:
-    image: ${DOCKER_REGISTRY-}kazakhloto
     build:
+      context: ./
       dockerfile: Dockerfile
-    ports:
-      - "8120:80"
+    depends_on:
+      - postgres
 
   postgres:
-    container_name: postgresFront
+    container_name: postgres
     image: "postgres:12"
     environment:
       POSTGRES_USER: "postgres"
@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
   
   pgadmin:
-    container_name: pgadminFront 
+    container_name: pgadmin 
     image: "dpage/pgadmin4:4.24"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin

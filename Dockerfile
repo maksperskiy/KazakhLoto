@@ -6,4 +6,5 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 COPY . /app
 
-CMD python /app/bot.py
+RUN sed -i -e 's/localhost/postgres/; s/15432/5432/' config.py
+CMD python /app/app.py

