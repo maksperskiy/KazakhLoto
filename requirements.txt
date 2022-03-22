@@ -1,11 +1,4 @@
-APScheduler==3.6.3
-certifi==2020.12.5
-cffi==1.14.5
-cryptography==3.4.7
-decorator==4.4.2
-pycparser==2.20
-python-telegram-bot==13.4.1
-pytz==2021.1
-six==1.15.0
-tornado==6.1
-tzlocal==2.1
+aiogram==2.19
+Pillow==9.0.1
+psycopg2==2.9.3
+SQLAlchemy==1.4.32
