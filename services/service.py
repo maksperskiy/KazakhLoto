@@ -1,9 +1,8 @@
 from config import CONNECTION_STRING
 from data.entities import *
-from loader import dp, bot
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker, joinedload, load_only
+from sqlalchemy.orm import Session
 
 import random
 

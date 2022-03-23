@@ -1,14 +1,10 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 import markups.markups as nav
 from aiogram import types
-from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
-from aiogram.utils.callback_data import CallbackData
 from loader import dp, bot
 from services.service import *
-from datetime import datetime
-from states.storage import StartGame, Cards
-import json
+from states.storage import StartGame
+
 
 @dp.message_handler(commands=['start'], state=None)
 async def start(message: types.Message):
@@ -28,7 +24,7 @@ async def start(message: types.Message):
             if getTwitchName(user.id) is None:
                 await message.answer("Введите свой никнейм Твич!")
                 try:
-                    await StartGame.StartGameOne.set()
+                    await StartGame.startGame.set()
                 except:
                     print("Неккоректные символы")
                     await message.answer("Неккоректные символы")
@@ -37,43 +33,13 @@ async def start(message: types.Message):
         except:
             return
 
-@dp.message_handler(state=StartGame.StartGameOne)
-async def AddTwitch(message: types.Message, state: FSMContext):
+
+@dp.message_handler(state=StartGame.startGame)
+async def add_twitchname(message: types.Message, state: FSMContext):
     print(f"Имя {message.text}")
     addTwitchName(message.chat.id, message.text)
     if isGameStarted():
-        await message.answer("Вы установили ник", reply_markup=nav.AdminMenu)
+        await message.answer("Вы установили ник", reply_markup=nav.connectMenu)
     else:
         await message.answer("Вы установили ник")
     await state.finish()
-
-
-# ------------------------------------------------------------------------
-# @dp.message_handler(commands=['addCard'], state=None)
-# async def massiveCardAdd(message: types.Message):
-#     if (isAdmin(message.chat.id)):
-#         await message.answer("Введите № карточки")
-#         await Cards.CardOne.set()
-#     else:
-#         await message.answer("У вас нет прав")
-
-# @dp.message_handler(state=Cards.CardOne)
-# async def AddCard(message: types.Message, state: FSMContext):
-#     text = message.text
-#     await state.update_data(text=text)
-#     if (CheckCard(text) != 0):
-#         await message.answer("Такая карта уже существует")
-#         await state.finish()
-#     else:
-#         await message.answer("Введите числа через запятую")
-#         await Cards.CardTwo.set()
-
-# @dp.message_handler(state=Cards.CardTwo)
-# async def AddCard(message: types.Message, state: FSMContext):
-#     data = await state.get_data()
-#     id_card = int(data.get("text"))
-#     num_card = message.text
-#     InsertMass(id_card, num_card)
-#     await message.answer("Карточка сохранена")
-#     await state.finish()
-

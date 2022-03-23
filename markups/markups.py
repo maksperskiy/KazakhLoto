@@ -1,11 +1,10 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-#Выбор y/n
-btnConnect = KeyboardButton('Присоединиться')
-ynMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(btnConnect)
+connect = KeyboardButton('Присоединиться')
+connectMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(connect)
 
-#Админ
 startGame = KeyboardButton('Начать игру')
 onlineOfGame = KeyboardButton('Онлайн')
 closeGame = KeyboardButton('Завершить игру')
-AdminMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(startGame, onlineOfGame, closeGame)
+adminMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    startGame, onlineOfGame, closeGame)

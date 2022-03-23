@@ -1,7 +1,7 @@
 from config import CONNECTION_STRING
 from email.policy import default
-from sqlalchemy import create_engine, MetaData, Table, Integer, String, \
-    Column, DateTime, ForeignKey, Numeric, SmallInteger, Boolean, ARRAY, BigInteger
+from sqlalchemy import create_engine, Integer, String, \
+    Column, ForeignKey, Boolean, ARRAY, BigInteger
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
